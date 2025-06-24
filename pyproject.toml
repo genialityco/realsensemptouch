@@ -1,0 +1,27 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi (>=0.115.13,<0.116.0)",
+    "uvicorn (>=0.34.3,<0.35.0)",
+    "numpy (>=1,<2.0.0)",
+    "aiofiles (>=24.1.0,<25.0.0)",
+    "opencv-python (>=4.11.0.86,<5.0.0.0)",
+    "scipy (>=1.16.0,<2.0.0)",
+    "websockets (>=15.0.1,<16.0.0)",
+    "asyncio (>=3.4.3,<4.0.0)",
+    "mediapipe (>=0.10.21,<0.11.0)"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+package-mode = false
