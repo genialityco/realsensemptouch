@@ -11,6 +11,12 @@ import json
 import asyncio
 
 ws_clients = set()
+# Al inicio del script, define el event loop global
+event_loop = asyncio.new_event_loop()
+asyncio.set_event_loop(event_loop)
+
+# Lanza el loop en segundo plano
+threading.Thread(target=event_loop.run_forever, daemon=True).start()
 
 # Constants
 touch_threshold_mm = 300  # virtual "touch" distance threshold
@@ -109,8 +115,8 @@ def camera_loop():
                 x_px = point["2d_x_px"]
                 y_px = point["2d_y_px"]
                 cv2.circle(color_image, (x_px, y_px), 12, color, -1)
-            asyncio.run(broadcast_touch_points(points_withtouch))
-
+            #asyncio.run(broadcast_touch_points(points_withtouch))
+            asyncio.run_coroutine_threadsafe(broadcast_touch_points(points_withtouch), event_loop)
         # Encode frame
         _, jpeg = cv2.imencode('.jpg', color_image)
         with lock:
@@ -120,7 +126,7 @@ async def broadcast_touch_points(points):
     if ws_clients:
         message = json.dumps(points)
         disconnected = set()
-        for ws in ws_clients:
+        for ws in list(ws_clients):  # 👈 Esto evita el error
             try:
                 await ws.send_text(message)
             except:
